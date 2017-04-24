@@ -14,14 +14,18 @@ public class Driver
 		Rhymer.init();
 		Tagger.init();
 		
+		// String toTag = "clean_input/Where_the_hood_at.txt";
 		String toTag = "clean_input/99_problems.txt";
 		Song s = Tagger.tagFile(toTag);
 		
 		ArrayList<Word> uniqueWords = s.getUniqueWords();
 		ArrayList<Word> rhymes;
 		
+		Word w;
 		for (int i = 0; i < uniqueWords.size(); i++) {
-			System.out.print(uniqueWords.get(i) + "\t");
+			w = uniqueWords.get(i);
+			// System.out.print(w.getValue() + " (" + w.getSyllables() + ")\t");
+			System.out.print(w.getValue() + " (" + w.getPos() + ")\t");
 			
 			rhymes = Rhymer.rhyme(uniqueWords.get(i), uniqueWords);
 			
@@ -36,6 +40,31 @@ public class Driver
 			System.out.println("]");
 		}
 		
+		SentenceMaker mak = new SentenceMaker(uniqueWords);
+		
+		TransitionGraph graph = s.getTransitionGraph();
+		
+		for (int i = 0; i < uniqueWords.size(); i++) {
+			rhymes = Rhymer.rhyme(uniqueWords.get(i), uniqueWords);
+			
+			System.out.println(mak.makeLine(uniqueWords.get(i), 8, graph));
+			if (rhymes.size() > 0) {
+				System.out.println(mak.makeLine(rhymes.get(0), 8, graph));
+			}
+			System.out.println();
+		}
+		
+		System.out.println(graph);
+		
+		int[] randomAssignments = new int[7];
+		for (int i = 0; i < 188; i++) {
+			randomAssignments[GraphUtils.randomRowInColumn(graph, 0)]++;
+		}
+		
+		System.out.println("\n");
+		for (int i = 0; i < randomAssignments.length; i++) {
+			System.out.println(randomAssignments[i]);
+		}
 		
 		// printAllFiles("clean_input", "clean_output");
 		// printAllFilesVerbose("clean_input", "clean_output_verbose");

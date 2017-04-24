@@ -16,6 +16,11 @@ public class Stanza {
 		lines.add(l);
 	}
 	
+	public ArrayList<Line> getLines()
+	{
+		return lines;
+	}
+	
 	@Override
 	public String toString()
 	{

@@ -9,26 +9,51 @@ public class Song {
 	/** All words used in this song */
 	private ArrayList<Word> words = null;
 	
+	/** Graph of transitions for parts of speech */
+	private TransitionGraph graph = null;
+	
 	public Song()
 	{
 		stanzas = new ArrayList<Stanza>();
 		words = new ArrayList<Word>();
+		graph = new TransitionGraph();
 	}
 	
+	/**
+	 * Adds to the list of stanzas.
+	 * Also, updates the POS transition graph.
+	 * 
+	 * @param s Stanza to add
+	 */
 	public void addStanza(Stanza s)
 	{
 		stanzas.add(s);
+		
+		ArrayList<Line> lines = s.getLines();
+		for (Line l : lines) {
+			graph.doLine(l);
+		}
+	}
+	
+	public TransitionGraph getTransitionGraph()
+	{
+		return graph;
 	}
 	
 	/**
 	 * If the list of words doesn't already contain w, adds w.
 	 * 
-	 * @param w Word to add
+	 * @param word Word to add
 	 */
-	public void addUniqueWord(Word w)
+	public void addUniqueWord(Word word)
 	{
-		if (!words.contains(w)) {
-			words.add(w);
+//		Word w;
+//		for (int i = 0; i < words.size(); i++) {
+//			w = words.get(i);
+//			if (w.getValue().)
+//		}
+		if (!words.contains(word)) {
+			words.add(word);
 		}
 	}
 	

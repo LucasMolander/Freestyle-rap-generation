@@ -36,7 +36,7 @@ public class Word
     }
 	
 	private String value;
-	private String pos;
+	private PartOfSpeech pos;
 	private int syllables;
 	
 	public Word(String value, String pos)
@@ -47,7 +47,7 @@ public class Word
 		}
 		this.value = value;
 		
-		this.pos = pos;
+		this.pos = getSimplifiedPos(pos);
 		
 		syllables = PhraseUtilities.countSyllablesInWord(this.value);
 	}
@@ -57,9 +57,130 @@ public class Word
 		return value;
 	}
 	
-	public String getPos()
+	public PartOfSpeech getPos()
 	{
 		return pos;
+	}
+	
+	/**
+	 * A lot of these include non-alphabetical characters,
+	 * whereas this program currently only considers alphabetical words.
+	 * Therefore, a lot of them will go unused.
+	 * 
+	 * @return the simplified part of speech
+	 */
+	private static PartOfSpeech getSimplifiedPos(String complicatedPos)
+	{
+		if (complicatedPos.equals("CC")) // Coordinating conjunction
+			return PartOfSpeech.CONJUNCTION;
+
+		if (complicatedPos.equals("CD")) // Cardinal number
+			return PartOfSpeech.IDK;
+
+		if (complicatedPos.equals("DT")) // Determiner
+			return PartOfSpeech.ADJECTIVE;
+
+		if (complicatedPos.equals("EX")) // Existential there
+			return PartOfSpeech.IDK;
+
+		if (complicatedPos.equals("FW")) // Foreign word
+			return PartOfSpeech.IDK;
+
+		if (complicatedPos.equals("IN")) // Preposition or subordinating conjunction
+			return PartOfSpeech.PREPOSITION; // Used to be CON
+
+		if (complicatedPos.equals("JJ")) // Adjective
+			return PartOfSpeech.ADJECTIVE;
+
+		if (complicatedPos.equals("JJR")) // Adjective, comparative
+			return PartOfSpeech.ADJECTIVE;
+
+		if (complicatedPos.equals("JJS")) // Adjective, superlative
+			return PartOfSpeech.ADJECTIVE;
+
+		if (complicatedPos.equals("LS")) // List item marker
+			return PartOfSpeech.IDK;
+
+		if (complicatedPos.equals("MD")) // Modal
+			return PartOfSpeech.VERB;
+
+		if (complicatedPos.equals("NN")) // Noun, singular or mass
+			return PartOfSpeech.NOUN;
+
+		if (complicatedPos.equals("NNS")) // Noun, plural
+			return PartOfSpeech.NOUN;
+
+		if (complicatedPos.equals("NNP")) // Proper noun, singular
+			return PartOfSpeech.NOUN;
+
+		if (complicatedPos.equals("NNPS")) // Proper noun, plural
+			return PartOfSpeech.NOUN;
+
+		if (complicatedPos.equals("PDT")) // Predeterminer
+			return PartOfSpeech.ADJECTIVE;
+
+		if (complicatedPos.equals("POS")) // Possessive ending
+			return PartOfSpeech.NOUN;
+
+		if (complicatedPos.equals("PRP")) // Personal pronoun
+			return PartOfSpeech.PRONOUN;
+
+		if (complicatedPos.equals("PRP$")) // Possessive pronoun
+			return PartOfSpeech.PRONOUN;
+
+		if (complicatedPos.equals("RB")) // Adverb
+			return PartOfSpeech.ADVERB;
+
+		if (complicatedPos.equals("RBR")) // Adverb, comparative
+			return PartOfSpeech.ADVERB;
+
+		if (complicatedPos.equals("RBS")) // Adverb, superlative
+			return PartOfSpeech.ADVERB;
+
+		if (complicatedPos.equals("RP")) // Particle
+			return PartOfSpeech.IDK;
+
+		if (complicatedPos.equals("SYM")) // Symbol
+			return PartOfSpeech.IDK;
+
+		if (complicatedPos.equals("TO")) // to
+			return PartOfSpeech.ADJECTIVE;
+
+		if (complicatedPos.equals("UH")) // Interjection
+			return PartOfSpeech.IDK;
+
+		if (complicatedPos.equals("VB")) // Verb, base form
+			return PartOfSpeech.VERB;
+
+		if (complicatedPos.equals("VBD")) // Verb, past tense
+			return PartOfSpeech.VERB;
+
+		if (complicatedPos.equals("VBG")) // Verb, gerund or present participle
+			return PartOfSpeech.VERB;
+
+		if (complicatedPos.equals("VBN")) // Verb, past participle
+			return PartOfSpeech.VERB;
+
+		if (complicatedPos.equals("VBP")) // Verb, non-3rd person singular present
+			return PartOfSpeech.VERB;
+
+		if (complicatedPos.equals("VBZ")) // Verb, 3rd person singular present
+			return PartOfSpeech.VERB;
+
+		if (complicatedPos.equals("WDT")) // Wh-determiner
+			return PartOfSpeech.ADJECTIVE;
+
+		if (complicatedPos.equals("WP")) // Wh-pronoun
+			return PartOfSpeech.PRONOUN;
+
+		if (complicatedPos.equals("WP$")) // Possessive wh-pronoun
+			return PartOfSpeech.PRONOUN;
+
+		if (complicatedPos.equals("WRB")) // Wh-adverb
+			return PartOfSpeech.ADVERB;
+		
+		// Shouldn't get here
+		return PartOfSpeech.IDK;
 	}
 	
 	public int getSyllables()
@@ -80,7 +201,7 @@ public class Word
 			return false;
 		}
 		
-		if (!safeEquals(pos, other.pos)) {
+		if (this.pos != other.pos) {
 			return false;
 		}
 		

@@ -55,6 +55,8 @@ public class Rhymer {
 	
 	public static ArrayList<Word> rhyme(Word toRhyme, ArrayList<Word> words)
 	{
+		// System.out.println("rhyme(" + toRhyme.getValue() + ")");
+		
 		String rhymeSounds = dict.get(toRhyme.getValue());
 		
 		ArrayList<Word> rhymes = new ArrayList<Word>();
@@ -84,7 +86,10 @@ public class Rhymer {
 				
 				// Same ending sound
 				if (sounds[sounds.length - 1].equals(newSounds[newSounds.length - 1])
-					&& !w.getValue().equals(toRhyme.getValue())) {
+						&& !w.getValue().equals(toRhyme.getValue())) {
+					
+					// System.out.println("\tadd(" + w.getValue() + ", " + w.getPos() + ") 1");
+					
 					rhymes.add(w);
 				}
 			}
@@ -108,9 +113,16 @@ public class Rhymer {
 				
 				// Same ending sound
 				if (sounds[sounds.length - 1].equals(newSounds[newSounds.length - 1])
-					&& sounds[sounds.length - 2].equals(newSounds[newSounds.length - 2])
-					&& !w.getValue().equals(toRhyme.getValue())) {
-					rhymes.add(w);
+						&& sounds[sounds.length - 2].equals(newSounds[newSounds.length - 2])
+						&& !w.getValue().equals(toRhyme.getValue())) {
+					// Because we already did an initial pass
+					// we have to see if we already added it
+					if (!rhymes.contains(w)) {
+						
+						// System.out.println("\tadd(" + w.getValue() + ", " + w.getPos() + ") 2");
+						
+						rhymes.add(w);
+					}
 				}
 			}
 			
@@ -128,10 +140,13 @@ public class Rhymer {
 				
 				// Same ending sound
 				if (sounds[sounds.length - 1].equals(newSounds[newSounds.length - 1])
-					&& !w.getValue().equals(toRhyme.getValue())) {
+						&& !w.getValue().equals(toRhyme.getValue())) {
 					// Because we already did an initial pass
 					// we have to see if we already added it
 					if (!rhymes.contains(w)) {
+						
+						// System.out.println("\tadd(" + w.getValue() + ", " + w.getPos() + ") 3");
+						
 						rhymes.add(w);
 					}
 				}

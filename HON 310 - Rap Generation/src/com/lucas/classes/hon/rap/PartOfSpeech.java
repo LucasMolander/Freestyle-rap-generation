@@ -9,6 +9,7 @@ public enum PartOfSpeech {
 	ADJECTIVE,
 	CONJUNCTION,
 	PREPOSITION,
-	INTERJECTION
+	IDK // For Words that don't have an easy classification
 	
+	// INTERJECTION would go here, but those aren't dealing with, yo!
 }

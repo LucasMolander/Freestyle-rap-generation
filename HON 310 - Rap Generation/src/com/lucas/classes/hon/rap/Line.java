@@ -16,6 +16,11 @@ public class Line {
 		words.add(w);
 	}
 	
+	public ArrayList<Word> getWords()
+	{
+		return words;
+	}
+	
 	@Override
 	public String toString()
 	{
