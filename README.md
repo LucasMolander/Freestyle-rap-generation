@@ -6,22 +6,34 @@ I was trying to freestyle rap to my friend, and I failed horribly. I thought, "T
 Here are some lyrics generated from training on 99 Problems (Jay Z), Ni**as in Paris (Jay Z and Kanye West), Dirt Off Your Shoulder (Jay Z), Gangsta Rap Made Me Do It (Ice Cube), Where The Hood At (DMX), and X Gon' Give It To Ya (DMX):
 
 behind we lyrical his knock
+
 bite us be him going clock
 
+
 sacred recognize they open
+
 raw lethal he hard me registration
 
+
 it love or lying whole up
+
 it's his brush her only rap
 
+
 is we ya it fearless door
+
 pyroclastic all remind his for
 
+
 they ya for his against real
+
 havin youll bougie us them feel
 
+
 myself bless she shoot your wit
+
 or his sat her don't your hit
+
 ## Libraries used
 [Stanford POS Tagger](https://nlp.stanford.edu/software/tagger.shtml), [CMU Pronouncing Dictionray](http://www.speech.cs.cmu.edu/cgi-bin/cmudict), and [Apache MINA](http://mina.apache.org/).
 ## License
