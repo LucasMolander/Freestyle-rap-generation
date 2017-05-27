@@ -2,8 +2,14 @@ package com.lucas.classes.hon.rap;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a line in a song.
+ * 
+ * @author Lucas Molander
+ */
 public class Line {
 
+	/** Words in this line */
 	private ArrayList<Word> words = null;
 	
 	public Line()
@@ -21,6 +27,11 @@ public class Line {
 		return words;
 	}
 	
+	/**
+	 * Gets the words in this Line separated by spaces.
+	 * 
+	 * @return the words in this Line separated by spaces.
+	 */
 	@Override
 	public String toString()
 	{
@@ -37,6 +48,11 @@ public class Line {
 		return sb.toString();
 	}
 	
+	/**
+	 * For debugging.
+	 * 
+	 * @return same as toString(), but more info
+	 */
 	public String toStringVerbose()
 	{
 		StringBuffer sb = new StringBuffer();

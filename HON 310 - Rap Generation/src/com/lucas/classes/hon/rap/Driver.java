@@ -1,146 +1,83 @@
 package com.lucas.classes.hon.rap;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import com.lucas.classes.hon.rap.clean.PrepareLyrics;
 
+/**
+ * High level controller for the program.
+ * Houses the main method.
+ * 
+ * Also contains functions to clean up
+ * lyrics for the part of speech (POS) tagger.
+ * 
+ * The overall approach is to assign the POS
+ * and number of syllables to each word,
+ * and keep track of each POS transition.
+ * 
+ * Based on the POS transition graph,
+ * generate logical POS transitions while rhyming.
+ * 
+ * @author Lucas Molander
+ */
 public class Driver
 {
+	/** Lyric files */
+	private static final String[] lyricFiles = {
+		"99_problems.txt",					// Jay Z
+		"Brothers_in_paris.txt",			// Jay Z and Kanye West
+		"Dirt_off_your_shoulder.txt",		// Jay Z
+		"Gangsta_rap_made_me_do_it.txt",	// Ice Cube
+		"Where_the_hood_at.txt",			// DMX
+		"X_gon_give_it_to_ya.txt"			// DMX
+	};
+	
 	public static void main(String[] args) throws IOException
 	{
 		Rhymer.init();
 		Tagger.init();
 		
-		// String toTag = "clean_input/Where_the_hood_at.txt";
-		String toTag = "clean_input/99_problems.txt";
-		Song s = Tagger.tagFile(toTag);
-		
-		ArrayList<Word> uniqueWords = s.getUniqueWords();
-		ArrayList<Word> rhymes;
-		
-		Word w;
-		for (int i = 0; i < uniqueWords.size(); i++) {
-			w = uniqueWords.get(i);
-			// System.out.print(w.getValue() + " (" + w.getSyllables() + ")\t");
-			System.out.print(w.getValue() + " (" + w.getPos() + ")\t");
-			
-			rhymes = Rhymer.rhyme(uniqueWords.get(i), uniqueWords);
-			
-			System.out.print("[");
-			for (int j = 0; j < rhymes.size(); j++) {
-				System.out.print(rhymes.get(j));
-				
-				if (j < rhymes.size() - 1) {
-					System.out.print(", ");
-				}
-			}
-			System.out.println("]");
+		// Tag each lyric file
+		Song[] songs = new Song[lyricFiles.length];
+		for (int i = 0; i < lyricFiles.length; i++) {
+			songs[i] = Tagger.tagFile("input/" + lyricFiles[i]);
 		}
+		
+		ArrayList<Word> rhymes;
+		ArrayList<Word> uniqueWords = Song.compileWords(songs);
+		TransitionGraph graph = Song.compileTransitionGraphs(songs);
 		
 		SentenceMaker mak = new SentenceMaker(uniqueWords);
 		
-		TransitionGraph graph = s.getTransitionGraph();
-		
 		for (int i = 0; i < uniqueWords.size(); i++) {
 			rhymes = Rhymer.rhyme(uniqueWords.get(i), uniqueWords);
 			
-			System.out.println(mak.makeLine(uniqueWords.get(i), 8, graph));
 			if (rhymes.size() > 0) {
-				System.out.println(mak.makeLine(rhymes.get(0), 8, graph));
+				System.out.println(mak.makeLine(uniqueWords.get(i), 6, graph));
+				System.out.println(mak.makeLine(rhymes.get(0), 6, graph));
+				System.out.println();
 			}
-			System.out.println();
 		}
-		
-		System.out.println(graph);
-		
-		int[] randomAssignments = new int[7];
-		for (int i = 0; i < 188; i++) {
-			randomAssignments[GraphUtils.randomRowInColumn(graph, 0)]++;
-		}
-		
-		System.out.println("\n");
-		for (int i = 0; i < randomAssignments.length; i++) {
-			System.out.println(randomAssignments[i]);
-		}
-		
-		// printAllFiles("clean_input", "clean_output");
-		// printAllFilesVerbose("clean_input", "clean_output_verbose");
-		
-		// prepareLyrics("clean_input", "clean_input_test");
 	}
 	
+	/**
+	 * Calls PrepareLyrics.removeNonAlpha() on each lyric file.
+	 * 
+	 * @param inFolder input folder
+	 * @param outFolder output folder
+	 * @throws IOException
+	 */
 	public static void prepareLyrics(String inFolder, String outFolder) throws IOException
 	{
-		ArrayList<String> filesToClean = new ArrayList<String>();
-		filesToClean.add(inFolder + "/99_problems.txt");
-		filesToClean.add(inFolder + "/Brothers_in_paris.txt");
-		filesToClean.add(inFolder + "/Dirt_off_your_shoulder.txt");
-		filesToClean.add(inFolder + "/Gangsta_rap_made_me_do_it.txt");
-		filesToClean.add(inFolder + "/Where_the_hood_at.txt");
-		filesToClean.add(inFolder + "/X_gon_give_it_to_ya.txt");
+		String[] filesToClean = new String[lyricFiles.length];
+		for (int i = 0; i < filesToClean.length; i++) {
+			filesToClean[i] = inFolder + "/" + lyricFiles[i];
+		}
 		
 		for (String toClean : filesToClean) {
 			String outPath = outFolder + "/" + toClean.split("/")[1];
-			PrepareLyrics.prepareLyrics(toClean, outPath);
-		}
-	}
-	
-	public static void printAllFiles(String inFolder, String outFolder) throws IOException
-	{
-		Tagger.init();
-		
-		// String fileToTag = "input/in.txt";
-		// String fileToTag = "input/99_problems.txt";
-		
-		ArrayList<String> filesToTag = new ArrayList<String>();
-		filesToTag.add(inFolder + "/99_problems.txt");
-		filesToTag.add(inFolder + "/Brothers_in_paris.txt");
-		filesToTag.add(inFolder + "/Dirt_off_your_shoulder.txt");
-		filesToTag.add(inFolder + "/Gangsta_rap_made_me_do_it.txt");
-		filesToTag.add(inFolder + "/Where_the_hood_at.txt");
-		filesToTag.add(inFolder + "/X_gon_give_it_to_ya.txt");
-		
-		for (int i = 0; i < filesToTag.size(); i++) {
-			String fileToTag = filesToTag.get(i);
-			String outFile = outFolder + "/" + fileToTag.split("/")[1];
-			
-			Song s = Tagger.tagFile(fileToTag);
-			
-			File f = new File(outFile);
-			FileWriter fw = new FileWriter(f);
-			fw.write(s.toString());
-			fw.close();
-		}
-	}
-	
-	public static void printAllFilesVerbose(String inFolder, String outFolder) throws IOException
-	{
-		Tagger.init();
-		
-		// String fileToTag = "input/in.txt";
-		// String fileToTag = "input/99_problems.txt";
-		
-		ArrayList<String> filesToTag = new ArrayList<String>();
-		filesToTag.add(inFolder + "/99_problems.txt");
-		filesToTag.add(inFolder + "/Brothers_in_paris.txt");
-		filesToTag.add(inFolder + "/Dirt_off_your_shoulder.txt");
-		filesToTag.add(inFolder + "/Gangsta_rap_made_me_do_it.txt");
-		filesToTag.add(inFolder + "/Where_the_hood_at.txt");
-		filesToTag.add(inFolder + "/X_gon_give_it_to_ya.txt");
-		
-		for (int i = 0; i < filesToTag.size(); i++) {
-			String fileToTag = filesToTag.get(i);
-			String outFile = outFolder + "/" + fileToTag.split("/")[1];
-			
-			Song s = Tagger.tagFile(fileToTag);
-			
-			File f = new File(outFile);
-			FileWriter fw = new FileWriter(f);
-			fw.write(s.toStringVerbose());
-			fw.close();
+			PrepareLyrics.removeNonAlpha(toClean, outPath);
 		}
 	}
 }

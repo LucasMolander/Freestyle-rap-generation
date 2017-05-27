@@ -4,9 +4,17 @@ import java.util.HashMap;
 
 import com.lucas.classes.hon.rap.lib.PhraseUtilities;
 
+/**
+ * Wrapper for a String because it contains:
+ * more info (POS, number of syllables)
+ * and utility ().
+ * 
+ * @author Lucas Molander
+ */
 public class Word
 {
 	private static final HashMap<String, String> APOSTROPHES = createMap();
+	
     private static HashMap<String, String> createMap()
     {
         HashMap<String,String> m = new HashMap<String,String>();
@@ -208,6 +216,13 @@ public class Word
 		return true;
 	}
 	
+	/**
+	 * Used in equals() to carelessly compare Strings.
+	 * 
+	 * @param s1 first String to compare
+	 * @param s2 second String to compare
+	 * @return whether s1.equals(s2) (taking null into account)
+	 */
 	private static boolean safeEquals(String s1, String s2)
 	{
 		if (s1 != null) {
@@ -218,12 +233,22 @@ public class Word
 		return s2 == null;
 	}
 	
+	/**
+	 * The value for this word.
+	 * 
+	 * @return the value for this word
+	 */
 	@Override
 	public String toString()
 	{
 		return value;
 	}
 	
+	/**
+	 * Gets the value, POS, and number of syllables for this Word.
+	 * 
+	 * @return the value, POS, and number of syllables for this Word
+	 */
 	public String toStringVerbose()
 	{
 		return "[" + value + ", " + pos + ", " + syllables + "]";

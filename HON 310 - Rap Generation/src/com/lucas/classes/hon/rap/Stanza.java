@@ -2,6 +2,11 @@ package com.lucas.classes.hon.rap;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a stanza in a (rap) song.
+ * 
+ * @author Lucas Molander
+ */
 public class Stanza {
 
 	private ArrayList<Line> lines = null;
@@ -21,6 +26,11 @@ public class Stanza {
 		return lines;
 	}
 	
+	/**
+	 * Gets each line separated by a line feed.
+	 * 
+	 * @return each line separated by a line feed
+	 */
 	@Override
 	public String toString()
 	{
@@ -37,6 +47,11 @@ public class Stanza {
 		return sb.toString();
 	}
 	
+	/**
+	 * For debugging.
+	 * 
+	 * @return same as toString(), but more info
+	 */
 	public String toStringVerbose()
 	{
 		StringBuffer sb = new StringBuffer();

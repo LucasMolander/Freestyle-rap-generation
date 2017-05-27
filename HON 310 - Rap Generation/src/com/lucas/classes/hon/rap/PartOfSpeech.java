@@ -1,5 +1,10 @@
 package com.lucas.classes.hon.rap;
 
+/**
+ * The parts of speech.
+ * 
+ * @author Lucas Molander
+ */
 public enum PartOfSpeech {
 
 	NOUN,
@@ -11,5 +16,5 @@ public enum PartOfSpeech {
 	PREPOSITION,
 	IDK // For Words that don't have an easy classification
 	
-	// INTERJECTION would go here, but those aren't dealing with, yo!
+	// INTERJECTION would go here, but we aren't dealing with those, yo!
 }

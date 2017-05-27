@@ -2,8 +2,16 @@ package com.lucas.classes.hon.rap;
 
 import java.util.ArrayList;
 
+/**
+ * Represents an entire (rap) song.
+ * Contains the words and POS transitions used.
+ * Words are organized by stanzas. 
+ * 
+ * @author Lucas Molander
+ */
 public class Song {
 
+	/** The stanzas that make up this Song */
 	private ArrayList<Stanza> stanzas = null;
 	
 	/** All words used in this song */
@@ -11,6 +19,29 @@ public class Song {
 	
 	/** Graph of transitions for parts of speech */
 	private TransitionGraph graph = null;
+	
+	/** To filter out bad words */
+	private static final String[] BAD_WORDS = new String[] {
+		"ass",
+		"ball",
+		"bastard",
+		"bitch",
+		"boob",
+		"clit",
+		"cock",
+		"cunt",
+		"damn",
+		"dick",
+		"fuck",
+		"hoe",
+		"homo",
+		"nigg",
+		"pussy",
+		"queer",
+		"retard",
+		"shit",
+		"whore"
+	};
 	
 	public Song()
 	{
@@ -41,23 +72,28 @@ public class Song {
 	}
 	
 	/**
-	 * If the list of words doesn't already contain w, adds w.
+	 * UNIQUELY adds words.
+	 * 
+	 * Also, prevents bad words from being entered.
 	 * 
 	 * @param word Word to add
 	 */
-	public void addUniqueWord(Word word)
+	public void addWord(Word word)
 	{
-//		Word w;
-//		for (int i = 0; i < words.size(); i++) {
-//			w = words.get(i);
-//			if (w.getValue().)
-//		}
 		if (!words.contains(word)) {
+			
+			// If any bad word is in the word, reject it.
+			for (String bw : BAD_WORDS) {
+				if (word.getValue().contains(bw)) {
+					return;
+				}
+			}
+			
 			words.add(word);
 		}
 	}
 	
-	public ArrayList<Word> getUniqueWords()
+	public ArrayList<Word> getWords()
 	{
 		return words;
 	}
@@ -78,18 +114,44 @@ public class Song {
 		return sb.toString();
 	}
 	
-	public String toStringVerbose()
+	/**
+	 * Class method that aggregates words together.
+	 * 
+	 * @param songs
+	 * @return words from an array of songs
+	 */
+	public static ArrayList<Word> compileWords(Song[] songs)
 	{
-		StringBuffer sb = new StringBuffer();
+		ArrayList<Word> allWords = new ArrayList<Word>();
+		ArrayList<Word> tempWords = new ArrayList<Word>();
 		
-		for (int i = 0; i < stanzas.size(); i++) {
-			sb.append(stanzas.get(i).toStringVerbose());
+		for (int i = 0; i < songs.length; i++) {
+			tempWords = songs[i].getWords();
 			
-			if (i < stanzas.size() - 1) {
-				sb.append("\n");
+			for (Word tw : tempWords) {
+				if (!allWords.contains(tw)) {
+					allWords.add(tw);
+				}
 			}
 		}
 		
-		return sb.toString();
+		return allWords;
+	}
+	
+	/**
+	 * Class method that adds transition graphs together.
+	 * 
+	 * @param songs
+	 * @return aggregate graph
+	 */
+	public static TransitionGraph compileTransitionGraphs(Song[] songs)
+	{
+		TransitionGraph allGraph = new TransitionGraph();
+		
+		for (Song s : songs) {
+			allGraph.addGraph(s.getTransitionGraph());
+		}
+		
+		return allGraph;
 	}
 }

@@ -1,13 +1,25 @@
 package com.lucas.classes.hon.rap;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+/**
+ * Adjacency matrix representation of a weighted, directed graph.
+ * 
+ * @author Lucas Molander
+ */
 public class TransitionGraph {
 
+	/** Number of vertices in the graph */
 	private static final int SIZE = PartOfSpeech.values().length;
 	
+	/** Weights for each edge */
 	private int[][] graph = null;
 	
+	/**
+	 * Initialize a new TransitionGraph with 
+	 * all weights equal to 0.
+	 */
 	public TransitionGraph()
 	{
 		graph = new int[SIZE][SIZE];
@@ -41,6 +53,12 @@ public class TransitionGraph {
 		}
 	}
 	
+	/**
+	 * Maps PartOfSpeech values to indices for the graph.
+	 * 
+	 * @param pos PartOfSpeech to get the index of
+	 * @return index for pos
+	 */
 	public static int getIndex(PartOfSpeech pos)
 	{
 		switch (pos)
@@ -65,6 +83,12 @@ public class TransitionGraph {
 		}
 	}
 	
+	/**
+	 * Maps indices in the graph to PartOfSpeech values.
+	 * 
+	 * @param index index to get the PartOfSpeech for
+	 * @return the PartOfSpeech for the given index
+	 */
 	public static PartOfSpeech getPos(int index)
 	{
 		switch (index)
@@ -88,17 +112,33 @@ public class TransitionGraph {
 		}
 	}
 	
-	public int[][] getGraph()
+	/**
+	 * Gets a copy of this graph's weights.
+	 * 
+	 * @return a copy of this graph's weights
+	 */
+	public int[][] getCopy()
 	{
-		return graph;
+		int[][] copy = new int[SIZE][SIZE];
+		
+		for (int r = 0; r < copy.length; r++) {
+			copy[r] = Arrays.copyOf(graph[r], copy[r].length);
+		}
+		
+		return copy;
 	}
 	
+	/**
+	 * For debugging.
+	 * 
+	 * Prints the 2D grid.
+	 */
 	public String toString()
 	{
 		String out = "";
 		
-		for (int r = 0; r < graph.length; r++) {
-			for (int c = 0; c < graph[0].length; c++) {
+		for (int r = 0; r < graph.length - 1; r++) {		// -1 b/c don't want IDK entries
+			for (int c = 0; c < graph[0].length - 1; c++) {
 				out += graph[r][c];
 				
 				if (c < graph[0].length - 1) {
@@ -114,4 +154,19 @@ public class TransitionGraph {
 		return out;
 	}
 	
+	/**
+	 * Combine another graph's weights with graph's weights.
+	 * 
+	 * @param other graph to add to this graph
+	 */
+	public void addGraph(TransitionGraph other)
+	{
+		int[][] otherGraph = other.graph;
+		
+		for (int r = 0; r < graph.length; r++) {
+			for (int c = 0; c < graph[0].length; c++) {
+				graph[r][c] += otherGraph[r][c];
+			}
+		}
+	}
 }

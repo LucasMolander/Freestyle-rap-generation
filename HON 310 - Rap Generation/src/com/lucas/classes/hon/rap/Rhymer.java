@@ -9,12 +9,23 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+/**
+ * Uses the CMU pronouncing dictionary to provide rhyming utility.
+ * 
+ * @author Lucas Molander
+ */
 public class Rhymer {
 
 	private static final String DICT_PATH = "dictionary/cmudict-07b.txt";
 	
+	/** Maps words to their sounds */
 	private static HashMap<String, String> dict = null;
 	
+	/**
+	 * Read the rhyming dictionary into memory.
+	 * 
+	 * @throws IOException
+	 */
 	public static void init() throws IOException
 	{
 		dict = new HashMap<String, String>();
@@ -42,21 +53,16 @@ public class Rhymer {
 		br.close();
 	}
 	
-	public static void printDict()
-	{
-		Iterator<Entry<String, String>> itr = dict.entrySet().iterator();
-		
-		Entry<String, String> entry;
-		while (itr.hasNext()) {
-			entry = itr.next();
-			System.out.println(entry.getKey() + " - " + entry.getValue());
-		}
-	}
-	
+	/**
+	 * Yields a sentences given a word to rhyme with
+	 * and a list of potential words to use.
+	 * 
+	 * @param toRhyme word to rhyme with
+	 * @param words potential words to use
+	 * @return sentence that rhymes with the given word
+	 */
 	public static ArrayList<Word> rhyme(Word toRhyme, ArrayList<Word> words)
 	{
-		// System.out.println("rhyme(" + toRhyme.getValue() + ")");
-		
 		String rhymeSounds = dict.get(toRhyme.getValue());
 		
 		ArrayList<Word> rhymes = new ArrayList<Word>();
@@ -94,7 +100,6 @@ public class Rhymer {
 				}
 			}
 		} else {
-			
 			// First pass to get the same 2 endings
 			for (int i = 0; i < words.size(); i++) {
 				w = words.get(i);
@@ -118,9 +123,6 @@ public class Rhymer {
 					// Because we already did an initial pass
 					// we have to see if we already added it
 					if (!rhymes.contains(w)) {
-						
-						// System.out.println("\tadd(" + w.getValue() + ", " + w.getPos() + ") 2");
-						
 						rhymes.add(w);
 					}
 				}
@@ -144,15 +146,11 @@ public class Rhymer {
 					// Because we already did an initial pass
 					// we have to see if we already added it
 					if (!rhymes.contains(w)) {
-						
-						// System.out.println("\tadd(" + w.getValue() + ", " + w.getPos() + ") 3");
-						
 						rhymes.add(w);
 					}
 				}
 			}
 		}
-		
 		
 		return rhymes;
 	}

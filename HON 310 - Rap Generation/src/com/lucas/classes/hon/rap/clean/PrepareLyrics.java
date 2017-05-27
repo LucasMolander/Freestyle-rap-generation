@@ -6,15 +6,28 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ * Contains a useful method for excluding unwanted lyric information.
+ * 
+ * @author Lucas Molander
+ */
 public class PrepareLyrics
 {
-	public static void prepareLyrics(String inPath, String outPath) throws IOException
+	/**
+	 * Removes non-alphabetical characters from a file (but it keeps spaces).
+	 * 
+	 * @param inPath input file path
+	 * @param outPath output file path
+	 * @throws IOException
+	 */
+	public static void removeNonAlpha(String inPath, String outPath) throws IOException
 	{
-		// Get the data
+		// Get data from input file
 		byte[] data = Files.readAllBytes(Paths.get(inPath));
 		
 		ArrayList<Character> newData = new ArrayList<Character>();
 		
+		// Only take alphabetical characters and spaces
 		byte b;
 		for (int i = 0; i < data.length; i++) {
 			b = data[i];
@@ -31,52 +44,36 @@ public class PrepareLyrics
 				continue;
 			}
 			
-			if (isAlpha(b) || isSpace(b)) {
+			if (isAlpha(b) || b == ' ') {
 				newData.add((char) b);
 			}
 		}
 		
-		// One last dot!
+		// One last dot! Otherwise it skips over the last part of the song
 		newData.add('.');
 		
-		/*
-		char[] newData = new char[data.length];
-		int size = 0;
-		
-		byte b;
-		for (int i = 0; i < data.length; i++) {
-			b = data[i];
-			if (isAlpha(b) || isSpace(b) || isLineControl(b)) {
-				newData[size] = (char) b;
-				size++;
-			}
-		}
-		*/
-		
+		// Can't use ArrayList.toArray() because FileWriter.write()
+		// wants a char (primitive) array
 		char[] chars = new char[newData.size()];
 		for (int i = 0; i < newData.size(); i++) {
 			chars[i] = newData.get(i);
 		}
 		
-		// Write it out
+		// Write to output file
 		FileWriter fw = new FileWriter(outPath);
 		fw.write(chars, 0, newData.size());
 		fw.close();
 	}
 	
+	/**
+	 * Determine whether a character is alphabetical.
+	 * 
+	 * @param b input character
+	 * @return whether b is alphabetical
+	 */
 	private static boolean isAlpha(byte b)
 	{
 		return (b >= 'a' && b <= 'z') || 
 			   (b >= 'A' && b <= 'Z');
 	}
-	
-	private static boolean isSpace(byte b)
-	{
-		return b == ' ';
-	}
-	
-//	private static boolean isLineControl(byte b)
-//	{
-//		return b == '\r' || b == '\n';
-//	}
 }
