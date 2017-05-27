@@ -5,35 +5,31 @@ I was trying to freestyle rap to my friend, and I failed horribly. I thought, "T
 ## Example output
 Here are some lyrics generated from training on 99 Problems (Jay Z), Ni**as in Paris (Jay Z and Kanye West), Dirt Off Your Shoulder (Jay Z), Gangsta Rap Made Me Do It (Ice Cube), Where The Hood At (DMX), and X Gon' Give It To Ya (DMX):
 
-behind we lyrical his knock
-
+behind we lyrical his knock <br />
 bite us be him going clock
 
 
-sacred recognize they open
-
+sacred recognize they open <br />
 raw lethal he hard me registration
 
 
-it love or lying whole up
-
+it love or lying whole up <br />
 it's his brush her only rap
 
 
-is we ya it fearless door
-
+is we ya it fearless door <br />
 pyroclastic all remind his for
 
 
-they ya for his against real
-
+they ya for his against real <br />
 havin youll bougie us them feel
 
 
-myself bless she shoot your wit
-
+myself bless she shoot your wit <br />
 or his sat her don't your hit
 
+## Documentation
+[Here](https://lucasmolander.github.io/Freestyle-rap-generation/) is a link to the JavaDoc.
 ## Libraries used
 [Stanford POS Tagger](https://nlp.stanford.edu/software/tagger.shtml), [CMU Pronouncing Dictionray](http://www.speech.cs.cmu.edu/cgi-bin/cmudict), and [Apache MINA](http://mina.apache.org/).
 ## License
